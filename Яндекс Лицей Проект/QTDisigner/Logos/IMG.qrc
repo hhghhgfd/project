@@ -1,0 +1,9 @@
+<RCC>
+  <qresource prefix="Дщпщ">
+    <file>Odnoklassniki Logo.jpg</file>
+  </qresource>
+  <qresource prefix="logo">
+    <file>../project/VK Text Logo.jpg</file>
+  </qresource>
+  <qresource/>
+</RCC>
