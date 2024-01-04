@@ -9,50 +9,56 @@ def telegram_post(telegram_bot_token, channel_login, message="", files_paths=Non
         if len(files_paths) > 10:
             return "too many files"
 
+        # обработка файлов в зависимости от типа данных
         medias = []
         for file in files_paths:
-            print(file)
             file_type = guess_type(file)[0].split("/")
 
-            print(file_type)
+            # гифки отправляются только по одной, поэтому с ними работаем отдельно
             if file_type[1] == "gif":
-                medias.append(types.InputMediaAnimation(open(file=file, mode="rb"), caption=message))
+                if len(files_paths) > 1:
+                    return "there can only be one gif"
+                bot.send_animation(chat_id=channel_login, animation=open(file=file, mode="rb"), caption=message)
+                return "successfully posted"
+
+            # добавляем другие типы файлов в медиа группу
             elif file_type[0] == "image":
-                medias.append(types.InputMediaPhoto(open(file=file, mode="rb"), caption=message))
+                medias.append(types.InputMediaPhoto(open(file=file, mode="rb")))
             elif file_type[0] == "video":
-                medias.append(types.InputMediaVideo(open(file=file, mode="rb"), caption=message))
+                medias.append(types.InputMediaVideo(open(file=file, mode="rb")))
             elif file_type[0] == "audio":
-                medias.append(types.InputMediaAudio(open(file=file, mode="rb"), caption=message))
+                medias.append(types.InputMediaAudio(open(file=file, mode="rb")))
             else:
-                medias.append(types.InputMediaDocument(open(file=file, mode="rb"), caption=message))
-        print(medias)
+                medias.append(types.InputMediaDocument(open(file=file, mode="rb")))
+
+        # добавляем к первому файлу текст
+        medias[0].caption = message
 
         # проверка на разность типов файлов
         # вместе могут идти только фото и видео
+        media_types = list()
+        for media in medias:
+            media_types.append(media.type)
+        if "photo" in set(media_types) and "document" in set(media_types):
+            return "can't mix photos and documents"
+        if "photo" in set(media_types) and "audio" in set(media_types):
+            return "can't mix photos and audios"
+        if "video" in set(media_types) and "document" in set(media_types):
+            return "can't mix videos and documents"
+        if "video" in set(media_types) and "audio" in set(media_types):
+            return "can't mix videos and audios"
+        if "document" in set(media_types) and "audio" in set(media_types):
+            return "can't mix documents and audios"
 
+        # пост медиа группы в канал
         bot.send_media_group(chat_id=channel_login, media=medias)
-        return "success"
+        return "successfully posted"
     elif message:
+        # пост текста в канал
         bot.send_message(chat_id=channel_login, text=message)
-        return "success"
+        return "successfully posted"
     else:
         return "no specs"
 
 
-print(telegram_post("5833708631:AAH3otkx2PXvhsGLXdxqyuv-Pr6IsAtioXc", "@boxofpitsa",
-                    files_paths=["C:/Users/User/Downloads/Qt Designer Setup.exe"],
-                    message="text"))
-
-'''        if (types.InputMediaPhoto or types.InputMediaVideo) and types.InputMediaAudio in [type(media)
-                                                                                          for media in medias]:
-            return "can't mix photo/video content and audios"
-        elif types.InputMediaPhoto in [type(media) for media in medias] or types.InputMediaVideo in [type(media) for media in medias]:
-            return "can't mix photo/video content and documents"
-'''
-
-telegram_bot_token = '5833708631:AAH3otkx2PXvhsGLXdxqyuv-Pr6IsAtioXc'
-channel_login = '@boxofpitsa'
-
-# print(telegram_post("6688896910:AAGBTRUp8b0ZKTZot6k2ddNCvxaR359fB4o", "@aaaaaaaaaaaaaa1231231",
-#                     files_paths=["D:/Downloads/fnaf-springtrap.gif", "D:/Downloads/fnaf-springtrap.gif"],
-#                     message="text"))
+# print(telegram_post("your_bot_token", "@channel_name", files_paths=[], message=""))
