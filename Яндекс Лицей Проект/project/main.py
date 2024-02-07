@@ -6,7 +6,6 @@ from telebot import TeleBot, types
 from mimetypes import guess_type
 import vk_api
 import json
-import sqlite3
 
 
 files_paths = []

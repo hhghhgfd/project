@@ -8,6 +8,7 @@ class FirstForm(QMainWindow):
     def __init__(self):
         super().__init__()
         self.data = ['file1', 'file2', 'file3']
+        self.data1 = {'file1': 0, 'file2': 1, 'file3': 2}
         self.initUI()
 
 
@@ -22,12 +23,17 @@ class FirstForm(QMainWindow):
 
         for i in range(3):
             print(i)
-            self.btni = QLabel(self)
-            self.btni.setText(self.data[i])
-            self.btni.move(100, 30 + i * 30)
+            self.data[i] = QLabel(self)
+            self.data[i].setText(self.data[i])
+            self.data[i].move(100, 30 + i * 30)
 
-            self.btn = QPushButton(self)
-            self.btn.move(130, 30 + i * 30)
+            self.btni = QPushButton(self)
+            self.btni.resize(30, 30)
+            self.btni.move(130, 30 + i * 30)
+            self.btni.clicked.connect(self.run)
+
+    def run(self):
+        self.sender()
 
     def open_second_form(self):
         self.second_form = SecondForm(self, "Данные для второй формы")

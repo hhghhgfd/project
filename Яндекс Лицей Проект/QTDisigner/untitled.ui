@@ -10,13 +10,11 @@
     <height>500</height>
    </rect>
   </property>
-  <property name="font">
-   <font>
-    <family>DejaVu Sans</family>
-   </font>
-  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="animated">
+   <bool>true</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="verticalLayoutWidget">
@@ -31,10 +29,20 @@
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QTextEdit" name="text_input">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="font">
         <font>
-         <family>DejaVu Sans</family>
+         <family>Noto Color Emoji</family>
         </font>
+       </property>
+       <property name="html">
+        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Color Emoji'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -84,6 +92,48 @@
      <string>РАЗМЕСТИТЬ</string>
     </property>
    </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>10</y>
+      <width>251</width>
+      <height>301</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="files_names">
+     <item>
+      <widget class="QTextBrowser" name="file_1"/>
+     </item>
+     <item>
+      <widget class="QTextBrowser" name="file_2"/>
+     </item>
+     <item>
+      <widget class="QTextBrowser" name="file_3"/>
+     </item>
+     <item>
+      <widget class="QTextBrowser" name="file_4"/>
+     </item>
+     <item>
+      <widget class="QTextBrowser" name="file_5"/>
+     </item>
+     <item>
+      <widget class="QTextBrowser" name="file_6"/>
+     </item>
+     <item>
+      <widget class="QTextBrowser" name="file_7"/>
+     </item>
+     <item>
+      <widget class="QTextBrowser" name="file_8"/>
+     </item>
+     <item>
+      <widget class="QTextBrowser" name="file_9"/>
+     </item>
+     <item>
+      <widget class="QTextBrowser" name="file_10"/>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -91,7 +141,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
