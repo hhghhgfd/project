@@ -42,7 +42,6 @@ class MainUI(QMainWindow):
         uic.loadUi("untitled_1.0.ui", self)
         self.post_button.clicked.connect(self.post)
         self.add_files_button.clicked.connect(self.add_files)
-        self.repeat.clicked.connect(self.translation)
         self.clear_one.clicked.connect(self.removecell)
         self.clear_all.clicked.connect(self.delete)
 
@@ -50,8 +49,6 @@ class MainUI(QMainWindow):
         files_selected = QFileDialog.getOpenFileNames(self, "Открыть файлы")
         for file in files_selected[0]:
             self.files.append(file)
-
-    def translation(self):
         self.list_of_files.clear()
         self.list_of_files.addItems([x.split('/')[-1] for x in self.files])
 
