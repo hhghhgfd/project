@@ -7,11 +7,15 @@
     <x>0</x>
     <y>0</y>
     <width>719</width>
-    <height>363</height>
+    <height>400</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Кросспостинг для школы</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>app_logo.webp</normaloff>app_logo.webp</iconset>
   </property>
   <property name="animated">
    <bool>true</bool>
@@ -23,7 +27,7 @@
       <x>10</x>
       <y>10</y>
       <width>461</width>
-      <height>251</height>
+      <height>271</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -47,7 +51,10 @@ p, li { white-space: pre-wrap; }
       </widget>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
+      <layout class="QHBoxLayout" name="checkboxes">
+       <property name="spacing">
+        <number>6</number>
+       </property>
        <item>
         <widget class="QCheckBox" name="tg_checkbox">
          <property name="text">
@@ -62,6 +69,20 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QCheckBox" name="ok_checkbox">
+         <property name="text">
+          <string>Одноклассники</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="site_checkbox">
+         <property name="text">
+          <string>Веб-сайт</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
     </layout>
@@ -69,21 +90,31 @@ p, li { white-space: pre-wrap; }
    <widget class="QPushButton" name="add_files_button">
     <property name="geometry">
      <rect>
-      <x>660</x>
+      <x>480</x>
       <y>10</y>
       <width>50</width>
       <height>50</height>
      </rect>
     </property>
     <property name="text">
-     <string>Файлы</string>
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>add_file.webp</normaloff>add_file.webp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>32</width>
+      <height>32</height>
+     </size>
     </property>
    </widget>
    <widget class="QPushButton" name="post_button">
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>270</y>
+      <y>290</y>
       <width>471</width>
       <height>41</height>
      </rect>
@@ -95,55 +126,67 @@ p, li { white-space: pre-wrap; }
    <widget class="QListWidget" name="list_of_files">
     <property name="geometry">
      <rect>
-      <x>480</x>
+      <x>540</x>
       <y>10</y>
       <width>171</width>
-      <height>251</height>
+      <height>241</height>
      </rect>
     </property>
    </widget>
    <widget class="QPushButton" name="clear_all">
     <property name="geometry">
      <rect>
-      <x>660</x>
-      <y>70</y>
-      <width>51</width>
-      <height>51</height>
+      <x>540</x>
+      <y>300</y>
+      <width>171</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="minimumSize">
      <size>
       <width>0</width>
-      <height>41</height>
+      <height>0</height>
      </size>
-    </property>
-    <property name="text">
-     <string>X</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="clear_one">
-    <property name="geometry">
-     <rect>
-      <x>480</x>
-      <y>270</y>
-      <width>171</width>
-      <height>41</height>
-     </rect>
     </property>
     <property name="text">
      <string>Удалить всё</string>
     </property>
    </widget>
-   <widget class="QWidget" name="verticalLayoutWidget_2">
+   <widget class="QPushButton" name="clear_one">
     <property name="geometry">
      <rect>
-      <x>550</x>
-      <y>530</y>
-      <width>160</width>
-      <height>80</height>
+      <x>540</x>
+      <y>260</y>
+      <width>171</width>
+      <height>31</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout_2"/>
+    <property name="text">
+     <string>Удалить</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="add_files_button_2">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>70</y>
+      <width>50</width>
+      <height>50</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>emoji.webp</normaloff>emoji.webp</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>32</width>
+      <height>32</height>
+     </size>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
