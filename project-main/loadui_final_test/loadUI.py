@@ -4,11 +4,10 @@ import sys
 from PostingTG import telegram_post
 import vk_api
 import json
-from mimetypes import guess_type
 from PostingVk import vk_post
 
-telegram_bot_token = '5833708631:AAH3otkx2PXvhsGLXdxqyuv-Pr6IsAtioXc'
-channel_login = '@boxofpitsa'
+telegram_bot_token = ''
+channel_login = ''
 
 group_id_vk = ''
 login = ''

@@ -1,56 +1,59 @@
-from mimetypes import guess_type
 import vk_api
 import json
+from mimetypes import guess_type
 
-group_id = '-223288989'
-files_paths = []
 
-login = '79966980274'
-password = 'KtoBilol07('
-
-try:
-    VK = vk_api.VkApi(login, password, app_id=2685278)
-    VK.auth()
-    VK = VK.get_api()
-    access_token = 0
-
+def vk_post(login, password, group_id_vk, message="", files_paths=None):
     try:
-        User = VK.users.get()
-    except:
-        print("Error")
-    else:
+        # vk = vk_api.VkApi(login, password, app_id=2685278)
+        # vk.auth()
+        access_token = ''
         with open('vk_config.v2.json', 'r') as data_file:
             data = json.load(data_file)
 
         for xxx in data[login]['token'].keys():
             for yyy in data[login]['token'][xxx].keys():
                 access_token = data[login]['token'][xxx][yyy]['access_token']
-    vk_session = vk_api.VkApi(token=access_token)
-except:
-    print('ну и хуйня, братан')
+        vk_session = vk_api.VkApi(token=access_token)
+        vk_session_api = vk_session.get_api()
+    except vk_api.AuthError:
+        return "Ошибка аутентификации в ВК"
 
-
-def vk_post(group_id_vk, message="", files_path=None):
     if files_paths:
-        media = []
+        # проверка на количество файлов (должно быть не больше 10)
+        if len(files_paths) > 10:
+            return "Добавлено слишком много файлов"
+
+        # загрузка файлов в ВК
         upload = vk_api.VkUpload(vk_session)
+        medias = []
         for file in files_paths:
-            file_type = guess_type(file)[0].split("/")
-            if file_type[0] == "image":
-                photo = upload.photo(file, album_id="299120623", group_id=group_id_vk[1:])
-                media.append('photo{}_{}'.format(photo[0]['owner_id'], photo[0]['id']))
-            elif file_type[0] == "video":
-                video = upload.photo(file, album_id="299120623", group_id=group_id_vk[1:])
-                media.append('video{}_{}'.format(video[0]['owner_id'], video[0]['id']))
-        vk_session.method('wall.post', {
-            'owner_id': group_id_vk,
-            'from_group': 1,
-            'message': message,
-            'attachments': ', '.join(media),
-        })
+            try:
+                file_type = guess_type(file)[0].split("/")
+                if file_type[0] == "image":
+                    photo = upload.photo(file, album_id="299120623", group_id=group_id_vk[1:])
+                    medias.append('photo{}_{}'.format(photo[0]['owner_id'], photo[0]['id']))
+                elif file_type[0] == "video":
+                    video = upload.video(file, group_id=group_id_vk[1:])
+                    medias.append('video{}_{}'.format(video['owner_id'], video['video_id']))
+                else:
+                    return "Недопустимый тип файла"
+            except AttributeError:
+                return "Недопустимый тип файла"
+
+        # размещения поста с всеми файлами
+        vk_session_api.wall.post(owner_id=group_id_vk, from_group=1, message=message, attachments=', '.join(medias))
+        return "Успешно размещено в ВК"
+    elif message:
+        vk_session_api.wall.post(owner_id=group_id_vk, from_group=1, message=message)
+        return "Успешно размещено в ВК"
     else:
-        vk_session.method('wall.post', {
-            'owner_id': group_id_vk,
-            'from_group': 1,
-            'message': message,
-        })
+        return "Не указано никаких данных"
+
+
+# group_id = ''
+# files_paths = []
+# login = ''
+# password = ''
+#
+# print(vk_post(login=login, password=password, group_id_vk=group_id, message='', files_paths=files_paths))
