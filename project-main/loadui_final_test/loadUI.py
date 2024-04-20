@@ -2,9 +2,9 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog
 from PyQt5 import uic
 import sys
 from PostingTG import telegram_post
+from PostingVk import vk_post
 import vk_api
 import json
-from PostingVk import vk_post
 
 telegram_bot_token = ''
 channel_login = ''
@@ -57,7 +57,8 @@ class MainUI(QMainWindow):
                                 channel_login=channel_login, message=self.text_input.toPlainText(),
                                 files_paths=self.files))
         if self.vk_checkbox.isChecked():
-            print(vk_post(group_id_vk, message=self.text_input.toPlainText(), files_path=None))
+            print(vk_post(login=login, password=password, group_id_vk=group_id_vk,
+                          message=self.text_input.toPlainText(), files_paths=self.files))
 
     def removecell(self):
         listItems = self.list_of_files.selectedItems()
