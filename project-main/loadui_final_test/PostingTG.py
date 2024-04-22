@@ -7,26 +7,18 @@ def telegram_post(telegram_bot_token, channel_login, message="", files_paths=Non
     if files_paths:
         # проверка на количество файлов (должно быть не больше 10)
         if len(files_paths) > 10:
-            return "too many files"
+            return "Добавлено слишком много файлов"
 
         # обработка файлов в зависимости от типа данных
         medias = []
         for file in files_paths:
             try:
-                if guess_type(file):
-                    file_type = guess_type(file)[0].split("/")
-            except:
+                file_type = guess_type(file)[0].split("/")
+            except AttributeError:  # guess_type некорректно обрабатывает архивы, поэтому для них сделано исключение
                 file_type = [1, 1]
 
-            # гифки отправляются только по одной, поэтому с ними работаем отдельно
-            if file_type[1] == "gif":
-                if len(files_paths) > 1:
-                    return "there can only be one gif"
-                bot.send_animation(chat_id=channel_login, animation=open(file=file, mode="rb"), caption=message)
-                return "successfully posted"
-
-            # добавляем другие типы файлов в медиа группу
-            elif file_type[0] == "image":
+            # добавляем типы файлов в медиа группу
+            if file_type[0] == "image":
                 medias.append(types.InputMediaPhoto(open(file=file, mode="rb")))
             elif file_type[0] == "video":
                 medias.append(types.InputMediaVideo(open(file=file, mode="rb")))
@@ -43,25 +35,25 @@ def telegram_post(telegram_bot_token, channel_login, message="", files_paths=Non
         for media in medias:
             media_types.append(media.type)
         if "photo" in set(media_types) and "document" in set(media_types):
-            return "can't mix photos and documents"
+            return "Нельзя совмещать фото и документы"
         if "photo" in set(media_types) and "audio" in set(media_types):
-            return "can't mix photos and audios"
+            return "Нельзя совмещать фото и аудио"
         if "video" in set(media_types) and "document" in set(media_types):
-            return "can't mix videos and documents"
+            return "Нельзя совмещать видео и документы"
         if "video" in set(media_types) and "audio" in set(media_types):
-            return "can't mix videos and audios"
+            return "Нельзя совмещать видео и аудио"
         if "document" in set(media_types) and "audio" in set(media_types):
-            return "can't mix documents and audios"
+            return "Нельзя совмещать документы и аудио"
 
         # пост медиа группы в канал
         bot.send_media_group(chat_id=channel_login, media=medias)
-        return "successfully posted"
+        return "Успешно размещено в Телеграм"
     elif message:
         # пост текста в канал
         bot.send_message(chat_id=channel_login, text=message)
-        return "successfully posted"
+        return "Успешно размещено в Телеграм"
     else:
-        return "no specs"
+        return "Не указано никаких данных"
 
 
-# print(telegram_post("your_bot_token", "@channel_name", files_paths=[], message=""))
+# print(telegram_post("bot_token", "@your_channel_name", files_paths=[], message=""))
