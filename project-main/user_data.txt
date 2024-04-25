@@ -1,0 +1,1 @@
+{"TG": ["token", "group_id"], "VK": ["vk1.a.6An3diR1EBTkBerItPcoRoWCo0JRs-Rgf-PqSf8KL_O-ar7WDnF2dnMd_PgvdWU12-HHam2Nm9o7ZEn_7cO7-VEzAO77nk27N-CA08AZpFE-qhn75S_mocEJVZIx7JhAWiMMwsLiSEWu51jcZc13ap4cmb2kbPcKsAHixXwA-1nZ4JLvc2W0FKroFSUWgYkqEOlqhW26qm_DvQSjhqNvwg", "-223288989"]}
