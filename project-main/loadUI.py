@@ -1,31 +1,28 @@
-from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QInputDialog
+from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QInputDialog, QMessageBox
 from PyQt5 import uic
 import sys
 from PostingTG import telegram_post
 from PostingVk import vk_post
-from json import dump
-
-telegram_bot_token = ''
-channel_login = ''
-
-group_id_vk = ''
-login = ''
-password = ''
+from json import dump, load
+from os import path
 
 
 class MainUI(QMainWindow):
     def __init__(self):
-
         super().__init__()
         uic.loadUi("interface.ui", self)
-        # создание исходного файла данных
-        self.user_data = {
-            'TG': ['token', 'group_id'],
-            'VK': ['token', 'id']
-        }
 
-        with open('user_data.txt', 'w') as self.f:
-            dump(self.user_data, self.f)
+        if not path.exists('user_data.txt'):
+            self.user_data = {
+                'TG': 'group_id',
+                'VK': ['token', 'id']
+            }
+            with open('user_data.txt', 'w') as f:
+                dump(self.user_data, f)
+        else:
+            with open('user_data.txt', 'r') as f:
+                self.user_data = load(f)
+
         self.files = []
         self.post_button.clicked.connect(self.post)
         self.add_files_button.clicked.connect(self.add_files)
@@ -43,13 +40,36 @@ class MainUI(QMainWindow):
 
     def post(self):
         if self.tg_checkbox.isChecked():
-            print(telegram_post(telegram_bot_token=telegram_bot_token,
-                                channel_login=channel_login, message=self.text_input.toPlainText(),
-                                files_paths=self.files))
+            code, msg_text = telegram_post(channel_login=self.user_data["TG"], message=self.text_input.toPlainText(),
+                                files_paths=self.files)
+            if code:
+                msg = QMessageBox()
+                msg.setWindowTitle("Успешно")
+                msg.setText(msg_text)
+                msg.setIcon(QMessageBox.Information)
+                msg.exec_()
+            else:
+                msg = QMessageBox()
+                msg.setWindowTitle("Ошибка")
+                msg.setText(msg_text)
+                msg.setIcon(QMessageBox.Critical)
+                msg.exec_()
 
         if self.vk_checkbox.isChecked():
-            print(vk_post(access_token=self.access_token, group_id_vk=group_id_vk,
-                          message=self.text_input.toPlainText(), files_paths=self.files))
+            code, msg_text = vk_post(access_token=self.user_data["VK"][0], group_id_vk=self.user_data["VK"][1],
+                          message=self.text_input.toPlainText(), files_paths=self.files)
+            if code:
+                msg = QMessageBox()
+                msg.setWindowTitle("Успешно")
+                msg.setText(msg_text)
+                msg.setIcon(QMessageBox.Information)
+                msg.exec_()
+            else:
+                msg = QMessageBox()
+                msg.setWindowTitle("Ошибка")
+                msg.setText(msg_text)
+                msg.setIcon(QMessageBox.Critical)
+                msg.exec_()
 
     def detach_one(self):
         list_items = self.list_of_files.selectedItems()
@@ -64,16 +84,21 @@ class MainUI(QMainWindow):
         self.files.clear()
 
     def link_telegram(self):
-        self.user_data['TG'][0] = QInputDialog.getText(self, 'Токен бота', 'Введите токен бота:')[0]
-        self.user_data['TG'][1] = QInputDialog.getText(self, 'Логин канала', 'Введите ваш логин:')[0]
-        with open('user_data.txt', 'w') as self.f:
-            dump(self.user_data, self.f)
+        msg = QMessageBox()
+        msg.setWindowTitle("Добавьте нашего бота")
+        msg.setText("Добавьте @school_crossposting_bot как администратора в свой канал и выдайте ему права поста")
+        msg.setIcon(QMessageBox.Information)
+        msg.exec_()
+
+        self.user_data['TG'] = QInputDialog.getText(self, 'Логин канала', 'Введите логин канала (@your_channel):')[0]
+        with open('user_data.txt', 'w') as f:
+            dump(self.user_data, f)
 
     def link_vk(self):
         self.user_data['VK'][0] = QInputDialog.getText(self, 'Токен для работы с сообществом', 'Введите токен:')[0]
         self.user_data['VK'][1] = QInputDialog.getText(self, 'ID канала', 'Введите id сообщества:')[0]
-        with open('user_data.txt', 'w') as self.f:
-            dump(self.user_data, self.f)
+        with open('user_data.txt', 'w') as f:
+            dump(self.user_data, f)
 
 
 if __name__ == "__main__":

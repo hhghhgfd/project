@@ -2,12 +2,13 @@ from telebot import TeleBot, types
 from mimetypes import guess_type
 
 
-def telegram_post(telegram_bot_token: object, channel_login: object, message: object = "", files_paths: object = None) -> object:
+def telegram_post(channel_login, telegram_bot_token='7167304130:AAEED0jnNdIIbEqdYyQL3vGvFsdMt2O5P94',
+                  message="", files_paths=None):
     bot = TeleBot(telegram_bot_token)
     if files_paths:
         # проверка на количество файлов (должно быть не больше 10)
         if len(files_paths) > 10:
-            return "Добавлено слишком много файлов"
+            return 0, "Добавлено слишком много файлов"
 
         # обработка файлов в зависимости от типа данных
         medias = []
@@ -35,25 +36,28 @@ def telegram_post(telegram_bot_token: object, channel_login: object, message: ob
         for media in medias:
             media_types.append(media.type)
         if "photo" in set(media_types) and "document" in set(media_types):
-            return "Нельзя совмещать фото и документы"
+            return 0, "Нельзя совмещать фото и документы"
         if "photo" in set(media_types) and "audio" in set(media_types):
-            return "Нельзя совмещать фото и аудио"
+            return 0, "Нельзя совмещать фото и аудио"
         if "video" in set(media_types) and "document" in set(media_types):
-            return "Нельзя совмещать видео и документы"
+            return 0, "Нельзя совмещать видео и документы"
         if "video" in set(media_types) and "audio" in set(media_types):
-            return "Нельзя совмещать видео и аудио"
+            return 0, "Нельзя совмещать видео и аудио"
         if "document" in set(media_types) and "audio" in set(media_types):
-            return "Нельзя совмещать документы и аудио"
+            return 0, "Нельзя совмещать документы и аудио"
 
-        # пост медиа группы в канал
-        bot.send_media_group(chat_id=channel_login, media=medias)
-        return "Успешно размещено в Телеграм"
+        try:
+            # пост медиа группы в канал
+            bot.send_media_group(chat_id=channel_login, media=medias)
+            return 1, "Успешно размещено в Телеграм"
+        except:
+            return 0, "Ошибка размещения поста в Телеграм"
     elif message:
-        # пост текста в канал
-        bot.send_message(chat_id=channel_login, text=message)
-        return "Успешно размещено в Телеграм"
+        try:
+            # пост текста в канал
+            bot.send_message(chat_id=channel_login, text=message)
+            return 1, "Успешно размещено в Телеграм"
+        except:
+            return 0, "Ошибка размещения поста в Телеграм"
     else:
-        return "Не указано никаких данных"
-
-
-# print(telegram_post("bot_token", "@your_channel_name", files_paths=[], message=""))
+        return 0, "Не указано никаких данных"
